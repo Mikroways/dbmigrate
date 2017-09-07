@@ -1,6 +1,7 @@
 # DB Migrate
 
-Este repo contiene un wrapper de ActiveRecord migrations
+Este repo contiene un wrapper de ActiveRecord migrations, con soporte únicamente
+para MySQL
 
 ## Usando ruby nativo
 
@@ -38,6 +39,14 @@ docker build . -t mikroways/dbmigrate
 El ejemplo anterior invoca el script principal provisto por este repositorio.
 Entonces, corriendo el comando anterior, se visualizarán las opciones que admite
 el script. Ejemplos de uso con docker:
+
+#### IMPORTANTE SOBRE EL USO CON DOCKER
+
+**En caso de usar una base de datos en la misma PC donde se está corriendo docker,
+el host de la base de datos no debe ser loopback ni 127.0.0.1, sino la IP de la
+interfaz docker. En caso de usar docker-machine, utilizar la IP del la máquina
+anfitrión. Además, considerar los permisos de acceso a la base de datos en otras
+direcciones IP diferentes a la 127.0.0.1**
 
 ### Crear el schema base
 
