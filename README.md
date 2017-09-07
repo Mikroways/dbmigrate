@@ -35,3 +35,36 @@ construir con el siguiente comando:
 docker build . -t mikroways/dbmigrate
 ```
 
+El ejemplo anterior invoca el script principal provisto por este repositorio.
+Entonces, corriendo el comando anterior, se visualizarán las opciones que admite
+el script. Ejemplos de uso con docker:
+
+### Crear el schema base
+
+```bash
+docker run --rm -it -v `pwd`/db:/dbmigrate/db mikroways/dbmigrate -d
+```
+
+### Crear una nueva migracion
+
+```bash
+docker run --rm -it -v `pwd`/db:/dbmigrate/db mikroways/dbmigrate -n add_new_table
+```
+
+### Obtener un sql patch de upgrade
+
+```bash
+docker run --rm -it -v `pwd`/db:/dbmigrate/db mikroways/dbmigrate -m
+```
+
+### Obtener un sql patch de rollback
+
+```bash
+docker run --rm -it -v `pwd`/db:/dbmigrate/db mikroways/dbmigrate -r
+```
+
+
+```bash
+docker run --rm -it -v `pwd`/db:/dbmigrate/db mikroways/dbmigrate -d
+```
+
