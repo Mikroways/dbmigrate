@@ -25,7 +25,7 @@ Steps for using:
 "
 }
 
-test -f db/config.yml || ( echo -e "File db/config.yml must exists.\nSee http://edgeguides.rubyonrails.org/configuring.html#configuring-a-database\n\nDemo file:\n==========" && cat db/config.yml-sample && exit 1 )
+test -f db/config.yml || ( echo -e "File db/config.yml must exists.\nSee http://edgeguides.rubyonrails.org/configuring.html#configuring-a-database\n\nDemo file:\n==========" && cat .config.yml-sample && exit 1 )
 TEMP=`getopt -o dsmn:r --long dump-schema,status,migrate,new-migration:,rollback \
      -n 'dbmigrate' -- "$@"`
 
