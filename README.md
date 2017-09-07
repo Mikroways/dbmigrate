@@ -1,4 +1,4 @@
-#DB Migrate
+# DB Migrate
 
 Este repo contiene un wrapper de ActiveRecord migrations
 
@@ -20,7 +20,7 @@ bundle install
 
 Utilizar el wrapper provisto en el directorio `bin/dbmigrate`
 
-##Usando docker
+## Usando docker
 
 Simplemente correr:
 
