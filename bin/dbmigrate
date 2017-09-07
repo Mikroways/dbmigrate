@@ -1,0 +1,65 @@
+#!/bin/bash
+
+set -e
+
+usage() { echo "
+Usage: $0 [-n | -s | -m | -n NAME | -r]
+
+Where:
+  -d|--dump-schema          Dumps base schema from database
+  -n|--new-migration NAME   Create a new migration named NAME
+  -s|--status               Print migration status
+  -m|--migrate              Create sql patch to upgrade database
+  -r|--rollback             Create sql patch to downgrade database
+
+Steps for using:
+1. First create a baseline schema using -d option. This will create a file called db/schema.rb
+   This file is the baseline database agnostic file from where to start using migrations
+2. Each new db change, shall be done using -n NAME option. This option will create a new file named
+   db/migrations/XXXXXXXXX_NAME.rb and it must be edited using ActiveRecord migrations DSL specified.
+   For more information about migration sintax, refer to http://edgeguides.rubyonrails.org/active_record_migrations.html
+3. With some migrations created using step 2, you can get the resulting SQL to patch an existing database using 
+   -m option. The patch will be dumped to db/upgrade.sql
+4. If in doubt which migrations needs to be applied, you can use -s option
+5. To get a rollback patch, you can use -r option. The resulting path will be dumped to db/rollback.sql
+"
+}
+
+test -f db/config.yml || ( echo -e "File db/config.yml must exists.\nSee http://edgeguides.rubyonrails.org/configuring.html#configuring-a-database\n\nDemo file:\n==========" && cat db/config.yml-sample && exit 1 )
+TEMP=`getopt -o dsmn:r --long dump-schema,status,migrate,new-migration:,rollback \
+     -n 'dbmigrate' -- "$@"`
+
+if [ $? != 0 ] ; then usage >&2 ; exit 1 ; fi
+
+eval set -- "$TEMP"
+
+
+while true ; do
+    case "$1" in
+        -d|--dump-schema)   DUMP=1    ; shift ;;
+        -s|--status)        STATUS=1  ; shift ;;
+        -m|--migrate)       MIGRATE=1 ; shift ;;
+        -n|--new-migration) NEW=1 ; NAME=$2 ; shift 2 ;;
+        -r|--rollback)      ROLLBACK=1 ; STEPS=$2 ; shift 2 ;;
+        -- ) shift; break ;;
+        * ) break ;;
+
+    esac
+done
+
+[ "$DUMP" == 1 ] && bundle exec rake db:schema:dump \
+  && echo "schema dumped to db/schema.yml" && exit 0
+
+[ "$STATUS" == 1 ] && bundle exec rake db:migrate:status \
+  && exit 0
+
+[ "$MIGRATE" == 1 ] && bundle exec rake db:migrate:to_sql \
+  && exit 0
+
+[ "$NEW" == 1 ] && bundle exec rake db:new_migration name=$NAME \
+  && exit 0
+
+[ "$ROLLBACK" == 1 ] && bundle exec rake db:rollback:to_sql \
+  && exit 0
+
+usage && exit 1

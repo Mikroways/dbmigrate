@@ -1,0 +1,4 @@
+db/config.yml
+db/*sql
+db/schema.rb
+db/migrate
