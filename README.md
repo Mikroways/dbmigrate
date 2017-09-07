@@ -32,6 +32,6 @@ Si se desea modificar la imagen, editar el archivo `docker/Dockerfile` y
 construir con el siguiente comando:
 
 ```bash
-docker build -f docker/Dockerfile . -t mikroways/dbmigrate
+docker build . -t mikroways/dbmigrate
 ```
 
